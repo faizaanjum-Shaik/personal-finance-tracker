@@ -1,0 +1,24 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Node (if tools are added later)
+node_modules/
+npm-debug.log*
+
+# No API keys, passwords, or private data should ever be committed.

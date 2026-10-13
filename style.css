@@ -1,0 +1,551 @@
+/* ============================================================
+   Personal Finance Tracker — Stylesheet
+   Uses CSS custom properties so dark mode is a single attribute
+   toggle on <html data-theme="dark">.
+   ============================================================ */
+
+/* ── Design tokens (light mode defaults) ────────────────── */
+:root {
+    /* Surfaces */
+    --bg:              #f3f6fb;
+    --surface:         #ffffff;
+    --surface-2:       #f8fafd;
+    --border:          #e4eaf4;
+    --shadow:          rgba(0, 0, 0, 0.07);
+    --shadow-modal:    rgba(0, 0, 0, 0.18);
+
+    /* Text */
+    --text:            #243047;
+    --text-secondary:  #4b5e7e;
+    --text-muted:      #6b7fa3;
+    --heading:         #1a2d5a;
+
+    /* Inputs */
+    --input-bg:        #ffffff;
+    --input-border:    #ccd3df;
+
+    /* Buttons */
+    --btn-sec-bg:      #e8ecf5;
+    --btn-sec-color:   #243047;
+    --btn-sec-hover:   #d1d8ea;
+
+    /* Stat panels */
+    --stat-bg:         #f3f6fb;
+
+    /* Brand */
+    --brand:           #315ee8;
+    --brand-hover:     #1d4dcc;
+    --brand-ring:      rgba(49, 94, 232, 0.12);
+
+    /* Semantic */
+    --income-color:    #16a34a;
+    --expense-color:   #dc2626;
+    --income-border:   #22c55e;
+    --expense-border:  #ef4444;
+
+    /* Chart grid */
+    --chart-grid:      #e4eaf4;
+
+    /* Smooth theme transitions */
+    --transition: background-color 0.22s ease, color 0.22s ease,
+                  border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* ── Dark mode overrides ─────────────────────────────────── */
+[data-theme="dark"] {
+    --bg:              #0f172a;
+    --surface:         #1e293b;
+    --surface-2:       #243347;
+    --border:          #334155;
+    --shadow:          rgba(0, 0, 0, 0.35);
+    --shadow-modal:    rgba(0, 0, 0, 0.6);
+
+    --text:            #e2e8f0;
+    --text-secondary:  #94a3b8;
+    --text-muted:      #64748b;
+    --heading:         #f1f5f9;
+
+    --input-bg:        #1e293b;
+    --input-border:    #475569;
+
+    --btn-sec-bg:      #263349;
+    --btn-sec-color:   #e2e8f0;
+    --btn-sec-hover:   #334155;
+
+    --stat-bg:         #1a2b40;
+
+    --chart-grid:      #334155;
+}
+
+/* ── Reset & Base ────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: var(--transition);
+}
+
+/* ── Layout wrapper ─────────────────────────────────────── */
+header,
+section,
+.section-box {
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header {
+    position: relative;
+    text-align: center;
+    padding: 36px 60px 16px;   /* side padding leaves room for toggle */
+}
+
+header h1 {
+    font-size: 2rem;
+    color: var(--heading);
+}
+
+header .subtitle {
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-size: 1rem;
+}
+
+section {
+    padding: 0 16px 28px;
+}
+
+section h2 {
+    font-size: 1.2rem;
+    color: var(--heading);
+    margin-bottom: 14px;
+    padding-left: 4px;
+}
+
+/* ── Section box ────────────────────────────────────────── */
+.section-box {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 2px 12px var(--shadow);
+    transition: var(--transition);
+}
+
+/* ── Dark-mode toggle button ─────────────────────────────── */
+.dark-mode-toggle {
+    position: absolute;
+    top: 36px;
+    right: 16px;
+    background: var(--btn-sec-bg);
+    color: var(--btn-sec-color);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    line-height: 1;
+}
+
+.dark-mode-toggle:hover {
+    background: var(--btn-sec-hover);
+}
+
+/* ── Dashboard cards ────────────────────────────────────── */
+.dashboard {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 8px 16px 24px;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--surface);
+    padding: 22px 28px;
+    border-radius: 12px;
+    min-width: 180px;
+    flex: 1 1 160px;
+    text-align: center;
+    box-shadow: 0 2px 12px var(--shadow);
+    border-top: 4px solid var(--input-border);
+    transition: var(--transition);
+}
+
+.card h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.income-card  { border-top-color: #22c55e; }
+.expense-card { border-top-color: #ef4444; }
+.balance-card { border-top-color: var(--brand); }
+
+.income-card  p { color: var(--income-color); }
+.expense-card p { color: var(--expense-color); }
+.balance-card p { color: var(--brand); }
+
+/* ── Budget section ─────────────────────────────────────── */
+.budget-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.budget-form label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.budget-form input {
+    flex: 1 1 160px;
+}
+
+.budget-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.budget-stat {
+    background: var(--stat-bg);
+    border-radius: 8px;
+    padding: 12px 18px;
+    flex: 1 1 140px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: var(--text);
+}
+
+#budgetMessage {
+    font-size: 0.92rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+#budgetMessage.ok      { background: #dcfce7; color: #15803d; }
+#budgetMessage.warning { background: #fef9c3; color: #854d0e; }
+#budgetMessage.exceeded{ background: #fee2e2; color: #b91c1c; }
+#budgetMessage.unset   { background: #eff6ff; color: #1d4ed8; }
+
+[data-theme="dark"] #budgetMessage.ok      { background: #14532d; color: #86efac; }
+[data-theme="dark"] #budgetMessage.warning { background: #422006; color: #fde68a; }
+[data-theme="dark"] #budgetMessage.exceeded{ background: #450a0a; color: #fca5a5; }
+[data-theme="dark"] #budgetMessage.unset   { background: #1e3a5f; color: #93c5fd; }
+
+/* ── Add Transaction form ───────────────────────────────── */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.form-grid button {
+    grid-column: 1 / -1;
+}
+
+/* ── Filter bar ─────────────────────────────────────────── */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.filter-bar input {
+    flex: 1 1 200px;
+}
+
+.filter-bar select {
+    flex: 1 1 130px;
+}
+
+/* ── Shared form controls ───────────────────────────────── */
+input, select {
+    padding: 11px 13px;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    background: var(--input-bg);
+    color: var(--text);
+    width: 100%;
+    transition: var(--transition);
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--brand-ring);
+}
+
+button {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s, opacity 0.15s;
+}
+
+.btn-primary {
+    background: var(--brand);
+    color: #fff;
+}
+
+.btn-primary:hover { background: var(--brand-hover); }
+
+.btn-secondary {
+    background: var(--btn-sec-bg);
+    color: var(--btn-sec-color);
+}
+
+.btn-secondary:hover { background: var(--btn-sec-hover); }
+
+/* ── Transaction list ───────────────────────────────────── */
+#transactionList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#transactionList li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    flex-wrap: wrap;
+    transition: var(--transition);
+}
+
+.tx-info {
+    flex: 1 1 220px;
+}
+
+.tx-description {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--heading);
+}
+
+.tx-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.tx-amount {
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.tx-amount.income  { color: var(--income-color); }
+.tx-amount.expense { color: var(--expense-color); }
+
+.tx-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+.badge-income  { background: #dcfce7; color: #15803d; }
+.badge-expense { background: #fee2e2; color: #b91c1c; }
+
+[data-theme="dark"] .badge-income  { background: #14532d; color: #86efac; }
+[data-theme="dark"] .badge-expense { background: #450a0a; color: #fca5a5; }
+
+.tx-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.tx-actions button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+}
+
+.btn-edit               { background: #eff6ff; color: #1d4ed8; }
+.btn-edit:hover         { background: #dbeafe; }
+.btn-delete             { background: #fef2f2; color: #b91c1c; }
+.btn-delete:hover       { background: #fee2e2; }
+
+[data-theme="dark"] .btn-edit         { background: #1e3a5f; color: #93c5fd; }
+[data-theme="dark"] .btn-edit:hover   { background: #1e40af; color: #fff; }
+[data-theme="dark"] .btn-delete       { background: #450a0a; color: #fca5a5; }
+[data-theme="dark"] .btn-delete:hover { background: #7f1d1d; color: #fff; }
+
+/* ── Empty state ────────────────────────────────────────── */
+.empty-message {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    padding: 28px 0;
+}
+
+/* ── Edit modal ─────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.modal-overlay[hidden] { display: none; }
+
+.modal {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 8px 32px var(--shadow-modal);
+    transition: var(--transition);
+}
+
+.modal h3 {
+    font-size: 1.15rem;
+    color: var(--heading);
+    margin-bottom: 18px;
+}
+
+.modal label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+
+.modal input, .modal select {
+    width: 100%;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    flex: 1;
+}
+
+/* ── Charts ─────────────────────────────────────────────── */
+.chart-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.chart-period-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-container h4 {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.chart-container canvas {
+    max-height: 260px;
+    width: 100% !important;
+}
+
+/* ── Responsive tweaks ──────────────────────────────────── */
+@media (max-width: 600px) {
+    .charts-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 540px) {
+    header { padding: 36px 56px 16px; }
+    header h1 { font-size: 1.5rem; }
+    .dark-mode-toggle { top: 38px; right: 10px; padding: 6px 10px; }
+
+    .card { flex: 1 1 100%; padding: 16px; }
+    .card p { font-size: 1.3rem; }
+
+    .form-grid { grid-template-columns: 1fr; }
+
+    .filter-bar { flex-direction: column; }
+    .filter-bar input,
+    .filter-bar select { flex: 1 1 100%; }
+
+    #transactionList li { flex-direction: column; align-items: flex-start; }
+    .tx-actions { width: 100%; }
+    .tx-actions button { flex: 1; }
+}

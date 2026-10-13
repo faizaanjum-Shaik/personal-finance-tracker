@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Rounded background -->
+  <rect width="512" height="512" rx="100" fill="#315ee8"/>
+  <!-- White circle -->
+  <circle cx="256" cy="240" r="140" fill="none" stroke="white" stroke-width="22"/>
+  <!-- Rupee symbol -->
+  <text
+    x="256" y="305"
+    font-family="Arial, sans-serif"
+    font-size="180"
+    font-weight="bold"
+    text-anchor="middle"
+    fill="white"
+  >&#8377;</text>
+</svg>
