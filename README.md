@@ -1,6 +1,10 @@
 # 💰 Personal Finance Tracker
 
-A beginner-friendly, browser-based personal finance tracker built with plain **HTML, CSS, and vanilla JavaScript**. No frameworks, no dependencies — just open `index.html` in your browser and start tracking.
+A beginner-friendly, responsive web application to manage personal income, expenses, and monthly budgets. Built using **HTML5, CSS3, and vanilla JavaScript**, it helps users record transactions, monitor spending, and track their financial balance.
+
+**🌐 Live Demo:** https://faizaanjum-shaik.github.io/personal-finance-tracker/
+
+**💻 Source Code:** https://github.com/faizaanjum-Shaik/personal-finance-tracker No frameworks, no dependencies — just open `index.html` in your browser and start tracking.
 
 ---
 
