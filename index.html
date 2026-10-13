@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#315ee8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Finance">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>💰 Personal Finance Tracker</h1>
+        <p class="subtitle">Track your money. Manage your future.</p>
+    </header>
+
+    <!-- Dashboard Cards -->
+    <section aria-label="Summary">
+        <div class="dashboard">
+            <div class="card income-card">
+                <h3>Total Income</h3>
+                <p id="income">₹0.00</p>
+            </div>
+            <div class="card expense-card">
+                <h3>Total Expenses</h3>
+                <p id="expenses">₹0.00</p>
+            </div>
+            <div class="card balance-card">
+                <h3>Balance</h3>
+                <p id="balance">₹0.00</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Monthly Budget Section -->
+    <section aria-label="Monthly Budget">
+        <h2>📅 Monthly Budget</h2>
+        <div id="budgetSection" class="section-box">
+            <div class="budget-form">
+                <label for="monthlyBudget">Set monthly budget (₹):</label>
+                <input
+                    type="number"
+                    id="monthlyBudget"
+                    placeholder="Enter budget amount"
+                    min="1"
+                    step="0.01"
+                    aria-label="Monthly budget amount"
+                >
+                <button type="button" id="saveBudget">Save Budget</button>
+            </div>
+
+            <div class="budget-stats">
+                <div class="budget-stat">
+                    <span class="stat-label">Monthly Budget</span>
+                    <span class="stat-value" id="budgetAmount">₹0.00</span>
+                </div>
+                <div class="budget-stat">
+                    <span class="stat-label">Spent This Month</span>
+                    <span class="stat-value" id="budgetSpent">₹0.00</span>
+                </div>
+                <div class="budget-stat">
+                    <span class="stat-label">Remaining</span>
+                    <span class="stat-value" id="budgetRemaining">₹0.00</span>
+                </div>
+            </div>
+
+            <p id="budgetMessage" role="status" aria-live="polite"></p>
+        </div>
+    </section>
+
+    <!-- Add Transaction Form -->
+    <section aria-label="Add Transaction">
+        <h2>➕ Add a Transaction</h2>
+        <div class="section-box">
+            <form id="transactionForm">
+                <div class="form-grid">
+                    <input
+                        id="description"
+                        type="text"
+                        placeholder="Description (e.g. Grocery shopping)"
+                        required
+                        aria-label="Transaction description"
+                        autocomplete="off"
+                    >
+
+                    <input
+                        id="amount"
+                        type="number"
+                        placeholder="Amount in ₹"
+                        min="0.01"
+                        step="0.01"
+                        required
+                        aria-label="Transaction amount"
+                    >
+
+                    <select id="type" aria-label="Transaction type">
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+
+                    <select id="category" required aria-label="Transaction category">
+                        <option value="">Select Category</option>
+                        <option value="Food">🍔 Food</option>
+                        <option value="Education">📚 Education</option>
+                        <option value="Travel">✈️ Travel</option>
+                        <option value="Shopping">🛍️ Shopping</option>
+                        <option value="Bills">💡 Bills</option>
+                        <option value="Salary">💼 Salary</option>
+                        <option value="Healthcare">🏥 Healthcare</option>
+                        <option value="Entertainment">🎬 Entertainment</option>
+                        <option value="Other">📦 Other</option>
+                    </select>
+
+                    <input
+                        id="date"
+                        type="date"
+                        required
+                        aria-label="Transaction date"
+                    >
+
+                    <button type="submit" class="btn-primary">Add Transaction</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ── Charts ────────────────────────────────────────── -->
+    <section aria-label="Spending Overview">
+        <h2>📊 Spending Overview</h2>
+        <div class="section-box">
+            <!-- Toggle: This Month / All Time (affects category chart only) -->
+            <div class="chart-controls">
+                <span class="chart-period-label" id="chartPeriodLabel">Category chart: This Month</span>
+                <button type="button" id="toggleChartPeriod" class="btn-secondary btn-sm">
+                    Switch to All Time
+                </button>
+            </div>
+
+            <div class="charts-grid">
+                <!-- Doughnut: Expenses by category -->
+                <div class="chart-container">
+                    <h4>Expenses by Category</h4>
+                    <canvas id="categoryChart" aria-label="Expenses by category chart"></canvas>
+                    <p id="categoryChartEmpty" class="empty-message" hidden>
+                        No expense data for this period.
+                    </p>
+                </div>
+
+                <!-- Bar: Income vs Expenses — last 6 months -->
+                <div class="chart-container">
+                    <h4>Income vs Expenses — Last 6 Months</h4>
+                    <canvas id="monthlyChart" aria-label="Monthly income vs expenses bar chart"></canvas>
+                    <p id="monthlyChartEmpty" class="empty-message" hidden>
+                        Add transactions to see monthly trends.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transaction History -->
+    <section aria-label="Transaction History">
+        <h2>📋 Transaction History</h2>
+        <div class="section-box">
+
+            <!-- Search and Filters -->
+            <div class="filter-bar">
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="🔍 Search by description..."
+                    aria-label="Search transactions"
+                    autocomplete="off"
+                >
+                <select id="filterType" aria-label="Filter by type">
+                    <option value="all">All Types</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <select id="filterCategory" aria-label="Filter by category">
+                    <option value="all">All Categories</option>
+                    <option value="Food">Food</option>
+                    <option value="Education">Education</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Other">Other</option>
+                </select>
+                <button type="button" id="clearFilters" class="btn-secondary">Clear Filters</button>
+            </div>
+
+            <!-- Transaction List -->
+            <ul id="transactionList" aria-label="Transactions"></ul>
+            <p id="emptyMessage" class="empty-message" hidden>No transactions found. Add one above!</p>
+        </div>
+    </section>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+        <div class="modal">
+            <h3 id="modalTitle">Edit Transaction</h3>
+            <form id="editForm">
+                <label for="editDescription">Description</label>
+                <input id="editDescription" type="text" required autocomplete="off">
+
+                <label for="editAmount">Amount (₹)</label>
+                <input id="editAmount" type="number" min="0.01" step="0.01" required>
+
+                <label for="editType">Type</label>
+                <select id="editType">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+
+                <label for="editCategory">Category</label>
+                <select id="editCategory" required>
+                    <option value="Food">🍔 Food</option>
+                    <option value="Education">📚 Education</option>
+                    <option value="Travel">✈️ Travel</option>
+                    <option value="Shopping">🛍️ Shopping</option>
+                    <option value="Bills">💡 Bills</option>
+                    <option value="Salary">💼 Salary</option>
+                    <option value="Healthcare">🏥 Healthcare</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
+                    <option value="Other">📦 Other</option>
+                </select>
+
+                <label for="editDate">Date</label>
+                <input id="editDate" type="date" required>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" id="cancelEdit" class="btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chart.js (must load before script.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Service Worker registration -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js")
+                .then(function () { console.log("SW registered."); })
+                .catch(function (err) { console.warn("SW registration failed:", err); });
+        }
+    </script>
+</body>
+</html>
+
